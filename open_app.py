@@ -52,12 +52,9 @@ def open_app(app_name):
     aliases = {
         "vscode": "code",
         "visual studio code": "code",
-        "android studio": r"C:\Program Files\Android\Android Studio\bin\studio64.exe",
-        "arduino ide": r"C:\Users\MANN\AppData\Local\Programs\Arduino IDE\Arduino IDE.exe",
         "chrome": "chrome",
         "notepad": "notepad",
         "terminal": "wt",
-        "figma": r"C:\Users\MANN\AppData\Local\Figma\Figma.exe",
         "microsoft teams": "ms-teams",
         "teams": "ms-teams",
     }
