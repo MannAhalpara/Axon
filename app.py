@@ -147,11 +147,7 @@ async def taskExec(input_mode):
             break
         elif command == "who am i":
             response = (
-                "You are Mann, my creator and a fourth-semester B-Tech ICT student. "
-                "You're passionate about AI and ML, quantum physics, space, UI/UX design, and futuristic tech. "
-                "Skilled in Python, computer vision, and web development, you've built projects like "
-                "A-star Pathfinding Visualizer, Learnistic, Career Up, and FraudGuard. "
-                "A curious, creative learner. "
+                # "Your bio"
             )
             speak(response)
         elif command == "who are you":
