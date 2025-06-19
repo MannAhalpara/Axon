@@ -1,0 +1,10 @@
+requests
+pyttsx3
+speech_recognition
+pygame
+pyautogui
+gTTS
+fuzzywuzzy
+python-Levenshtein
+openai
+wikipedia
