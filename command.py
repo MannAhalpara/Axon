@@ -6,7 +6,7 @@ import os
 
 # Gemini AI API configuration
 GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
-GEMINI_API_KEY = "AIzaSyC_5hw3No613yNLQ_k_tIlf4_yqt8BCzFg"  # Replace with valid Gemini API key
+GEMINI_API_KEY = "your gemini api key"
 
 GEMINI_PROMPT = """
 You are an AI assistant tasked with parsing natural language commands for a Jarvis-like voice assistant. Your job is to take a user's spoken input, normalize it, and map it to a predefined command from a command map, even if the input contains typos, misspellings, or speech recognition errors. Use semantic understanding to infer the intended command. The command map is:
