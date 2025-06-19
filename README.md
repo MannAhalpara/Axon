@@ -1,5 +1,5 @@
 
-# 🧠 Axon Voice Assistant
+# 🧠 Axon
 
 **Axon** is a Python-based personal voice assistant inspired by J.A.R.V.I.S. from Iron Man. It understands spoken or typed natural language commands and can perform tasks like opening apps, searching online, describing your screen, and answering questions using AI.
 
