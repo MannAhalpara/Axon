@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-token = "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"
+token = "your openai token"
 endpoint = "https://models.github.ai/inference"
 model = "openai/gpt-4.1"
 
