@@ -72,15 +72,8 @@ axon-voice-assistant/
 ├── ask_ai.py            # AI question answering and response formatting
 ├── open_app.py          # App launcher (UWP + traditional)
 ├── wikipedia.py         # Wikipedia article summarizer
-├── log.txt              # Logs interactions
 ├── requirements.txt     # Python dependencies
 ```
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
@@ -88,4 +81,4 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 - Inspired by **J.A.R.V.I.S.** from *Iron Man*
 - Powered by **Gemini AI** and **OpenAI-compatible APIs**
-- Built with **Python** and ❤️ by [YourName]
+- Built with **Python** and ❤️ by Mann
