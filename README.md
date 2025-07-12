@@ -80,5 +80,5 @@ axon-voice-assistant/
 ## 🙌 Credits
 
 - Inspired by **J.A.R.V.I.S.** from *Iron Man*
-- Powered by **Gemini AI** and **OpenAI-compatible APIs**
+- Powered by **Gemini AI** and **Llama Meta**
 - Built with **Python** and ❤️ by Mann
