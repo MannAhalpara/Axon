@@ -12,7 +12,7 @@
 - ⚙️ Open traditional and UWP Windows apps
 - 🔍 Search YouTube, Google, and Wikipedia
 - 🖼️ Describe what's on your screen using image analysis
-- 💬 Ask general questions (via OpenAI-compatible API)
+- 💬 Ask general questions (via Llama by Meta)
 - 🗣️ Text-to-Speech using `pyttsx3` (fallback: `gTTS`)
 - 🔍 Fuzzy matching for commands (e.g., `whooo am i` → `who am i`)
 - 📝 Logs all interactions to `log.txt`
@@ -34,7 +34,7 @@ pip install -r requirements.txt
 ## 🔐 API Setup
 
 - **Gemini AI:** Add your API key to `command.py` (`GEMINI_API_KEY`)
-- **OpenAI-compatible API:** Update `token` and `endpoint` in `ask_ai.py`
+- **Llama valid github token:** Update `token` and `endpoint` in `ask_ai.py`
 
 ---
 
