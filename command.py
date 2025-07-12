@@ -6,12 +6,12 @@ import os
 
 # Gemini AI API configuration
 GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
-GEMINI_API_KEY = "your gemini api key"
+GEMINI_API_KEY = "your valid Gemini API key" 
 
 GEMINI_PROMPT = """
 You are an AI assistant tasked with parsing natural language commands for a Jarvis-like voice assistant. Your job is to take a user's spoken input, normalize it, and map it to a predefined command from a command map, even if the input contains typos, misspellings, or speech recognition errors. Use semantic understanding to infer the intended command. The command map is:
 
-{command_map}
+{0}
 
 ### Instructions:
 1. **Input**: The user's spoken or typed command (e.g., "open spotify" or "whooo am i").
@@ -35,27 +35,31 @@ You are an AI assistant tasked with parsing natural language commands for a Jarv
 
 ### Examples:
 - Input: "open spotify"
-  Output: {"command": "open app", "args": "spotify", "confidence": 0.95}
+  Output: {{"command": "open app", "args": "spotify", "confidence": 0.95}}
 - Input: "search YouTube for Python tutorials"
-  Output: {"command": "youtube search", "args": "Python tutorials", "confidence": 0.90}
+  Output: {{"command": "youtube search", "args": "Python tutorials", "confidence": 0.90}}
 - Input: "tell me a joke now"
-  Output: {"command": "joke", "args": "", "confidence": 0.98}
+  Output: {{"command": "joke", "args": "", "confidence": 0.98}}
 - Input: "whooo am i"
-  Output: {"command": "who am i", "args": "", "confidence": 0.92}
+  Output: {{"command": "who am i", "args": "", "confidence": 0.92}}
 - Input: "hu am i"
-  Output: {"command": "who am i", "args": "", "confidence": 0.90}
+  Output: {{"command": "who am i", "args": "", "confidence": 0.90}}
 - Input: "who m i"
-  Output: {"command": "who am i", "args": "", "confidence": 0.91}
+  Output: {{"command": "who am i", "args": "", "confidence": 0.91}}
 - Input: "who are you please"
-  Output: {"command": "who are you", "args": "", "confidence": 0.98}
+  Output: {{"command": "who are you", "args": "", "confidence": 0.98}}
 - Input: "what's the weather"
-  Output: {"command": null, "args": "", "confidence": 0.0}
+  Output: {{"command": null, "args": "", "confidence": 0.0}}
+- Input: "hey axon ask ai about python"
+  Output: {{"command": "ask ai", "args": "about python", "confidence": 0.95}}
+- Input: "axon open whatsapp"
+  Output: {{"command": "open app", "args": "whatsapp", "confidence": 0.95}}
 
 ### Current Input:
-{user_input}
+{1}
 
 ### Command Map (for reference):
-{command_map}
+{0}
 
 Return the JSON output based on the current input.
 """
@@ -65,11 +69,13 @@ def process_command_with_gemini(query, command_map):
     Send the query to Gemini AI to parse and normalize the command.
     Returns (command, args) tuple.
     """
+    # Strip "hey axon" or "axon" from the beginning of the query
+    normalized_query = normalize_text(query)
+    prompt = GEMINI_PROMPT.format(
+        json.dumps(command_map, indent=2),
+        normalized_query
+    )
     try:
-        prompt = GEMINI_PROMPT.format(
-            command_map=json.dumps(command_map, indent=2),
-            user_input=query
-        )
         headers = {
             "Content-Type": "application/json"
         }
@@ -89,7 +95,6 @@ def process_command_with_gemini(query, command_map):
         )
         response.raise_for_status()
         result = response.json()
-        print(f"Gemini full response: {json.dumps(result, indent=2)}")
         if not result.get("candidates"):
             print("Gemini response missing 'candidates'")
             return None, query
@@ -98,7 +103,6 @@ def process_command_with_gemini(query, command_map):
             print("Gemini response missing 'content' or 'parts'")
             return None, query
         gemini_output_text = candidate["content"]["parts"][0].get("text", "{}")
-        print(f"Gemini raw output: {gemini_output_text}")
         try:
             gemini_output = json.loads(gemini_output_text)
         except json.JSONDecodeError:
@@ -112,7 +116,6 @@ def process_command_with_gemini(query, command_map):
         args = gemini_output.get("args", "")
         confidence = gemini_output.get("confidence", 0.0)
         if command and confidence > 0.5:
-            print(f"Gemini parsed: command={command}, args={args}, confidence={confidence}")
             return command, args
         else:
             print(f"Gemini failed to recognize command: {gemini_output}")
@@ -123,6 +126,21 @@ def process_command_with_gemini(query, command_map):
     except Exception as e:
         print(f"Error processing command with Gemini: {e}")
         return None, query
+
+def normalize_text(text):
+    """
+    Normalize the input text by removing prefixes like 'hey axon' or 'axon',
+    filler words, punctuation, and extra spaces.
+    """
+    text = text.lower()
+    # Remove "hey axon" or "axon" from the start
+    text = re.sub(r'^\s*(hey\s+axon|axon)\s+', '', text)
+    # Remove filler words
+    text = re.sub(r'\b(a|the|please|could you|can you|would you|kindly|now|for)\b', '', text)
+    # Remove punctuation
+    text = re.sub(r'[^\w\s]', '', text)
+    # Remove extra spaces
+    return re.sub(r'\s+', ' ', text).strip()
 
 def describe_image_with_gemini(image_path):
     """
@@ -166,7 +184,6 @@ def describe_image_with_gemini(image_path):
         )
         response.raise_for_status()
         result = response.json()
-        print(f"Gemini image response: {json.dumps(result, indent=2)}")
         if not result.get("candidates"):
             print("Gemini image response missing 'candidates'")
             return None
@@ -176,7 +193,6 @@ def describe_image_with_gemini(image_path):
             return None
         description = candidate["content"]["parts"][0].get("text", "")
         if description:
-            print(f"Image description: {description}")
             return description
         else:
             print("No description returned by Gemini")
