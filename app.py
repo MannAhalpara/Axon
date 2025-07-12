@@ -1,8 +1,13 @@
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="pygame")
+warnings.filterwarnings("ignore", category=UserWarning, module="fuzzywuzzy")
+import os
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
+
 from ask_ai import ask_ai, rewrite_response
 from open_app import open_app, uwp_apps
 from command import process_command_with_gemini, describe_image_with_gemini
 from wikipedia import get_wikipedia_summary
-import os
 import pyttsx3
 import speech_recognition as sr
 import webbrowser
@@ -35,7 +40,7 @@ COMMAND_MAP = {
     'who am i': ['who am i', 'who am i?', 'who is this'],
     'who are you': ['who are you', 'who are you?', 'who is axon'],
     'open app': ['open', 'launch', 'start', 'run'],
-    'describe screen': ['what\'s on my screen', 'describe my screen', 'what is on my screen', 'screen contents']  # New command
+    'describe screen': ['what\'s on my screen', 'describe my screen', 'what is on my screen', 'screen contents']
 }
 
 def get_input(prompt):
@@ -147,7 +152,11 @@ async def taskExec(input_mode):
             break
         elif command == "who am i":
             response = (
-                # "Your bio"
+                "You are Mann, my creator and a fourth-semester B-Tech ICT student. "
+                "You're passionate about AI and ML, quantum physics, space, UI/UX design, and futuristic tech. "
+                "Skilled in Python, computer vision, and web development, you've built projects like "
+                "A-star Pathfinding Visualizer, Learnistic, Career Up, and FraudGuard. "
+                "A curious, creative learner. "
             )
             speak(response)
         elif command == "who are you":
@@ -166,6 +175,8 @@ async def taskExec(input_mode):
             if args:
                 webbrowser.open(f"https://www.youtube.com/results?search_query={quote(args)}")
                 speak("Here's what I found on YouTube")
+            else:
+                speak("Please provide a search query")
         elif command == "google search":
             if args:
                 webbrowser.open(f"https://www.google.com/search?q={quote(args)}")
@@ -201,7 +212,9 @@ async def taskExec(input_mode):
                 # Analyze screenshot with Gemini
                 description = describe_image_with_gemini(screenshot_path)
                 if description:
-                    speak(description)
+                    # Rewrite description for natural speech
+                    rewritten_description = rewrite_response(description)
+                    speak(rewritten_description)
                 else:
                     speak("Sorry, I couldn't analyze what's on your screen.")
             finally:
