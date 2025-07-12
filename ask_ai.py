@@ -1,19 +1,22 @@
-from openai import OpenAI
+import os
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
 
-token = "your openai token"
+token = "your github llama token"
 endpoint = "https://models.github.ai/inference"
-model = "openai/gpt-4.1"
+model = "meta/Llama-4-Scout-17B-16E-Instruct"
 
-client = OpenAI(
-    base_url=endpoint,
-    api_key=token,
+client = ChatCompletionsClient(
+    endpoint=endpoint,
+    credential=AzureKeyCredential(token),
 )
 
 def ask_ai(query):
     """
     Ask the AI a question and return the response text.
     """
-    response = client.chat.completions.create(
+    response = client.complete(
         messages = [
             {"role": "system", "content": "You are Axon, a helpful and witty assistant inspired by Iron Man. Provide a clear, accurate, and concise answer to the following user query. Ensure the response is informative and suitable for further reformatting into natural speech."},
             {"role": "user", "content": query}
@@ -44,7 +47,7 @@ Preserve all the original meaning, advice, and helpfulness, but ensure the respo
 
 Do not include any characters or structures that would sound awkward or robotic when spoken aloud.
 """
-    result = client.chat.completions.create(
+    result = client.complete(
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": response}
